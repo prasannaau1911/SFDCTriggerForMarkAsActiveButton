@@ -1,0 +1,3 @@
+trigger AfterUpsert on cafsl__Oracle_Quote__c (after update,after insert) {
+       AfterUpsertOracleQuoteHandler.handleAfterUpdate(Trigger.new);
+}
