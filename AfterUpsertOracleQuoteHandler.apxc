@@ -1,0 +1,24 @@
+public with sharing class AfterUpsertOracleQuoteHandler {
+    public static void handleAfterUpdate(List<cafsl__Oracle_Quote__c > quoteList){
+       // update quoteList;
+       List<Id> quoteOppId = new List<Id>();
+        List<Opportunity> quoteOpp = new List<Opportunity>();
+        System.debug('quoteList: '+quoteList);
+        for(cafsl__Oracle_Quote__c quote: quoteList){
+            if(quote.cafsl__Syncing__c == true){
+                quote.cafsl__Opportunity__r.Primary_Quote_Name__c = quote.Name;
+                quoteOppId.add(quote.cafsl__Opportunity__r.Id);
+            }
+            System.debug('quote cafsl__Syncing__c: '+quote.cafsl__Syncing__c);
+            System.debug('quote Name: '+quote.Name);
+        }
+        if(!quoteOppId.isEmpty()){
+           quoteOpp = [Select id,Primary_Quote_Name__c from Opportunity where Id IN: quoteOppId];
+        if(!quoteOpp.isEmpty()){
+             Update quoteOpp;
+        }
+        }
+
+       
+    }
+}
